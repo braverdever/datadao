@@ -1,0 +1,12 @@
+{
+    "networks": {
+        "base-mainnet": {
+            "name": "Base Mainnet",
+            "chainId": "8453",
+            "rpcEndpoint": "https://base-rpc.publicnode.com",
+            "explorerLink": "https://basescan.org/",
+            "contractAddress": "0x5d5E4347b81FAe63d14F8F15Db74B49094B5341e",
+            "icon": "base.svg"
+        }
+    }
+}

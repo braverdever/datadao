@@ -1,0 +1,95 @@
+:root {
+  --grid-color: rgba(255, 255, 255, 0.05);
+  --point-color: rgba(255, 255, 255, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: auto; /* Changed from 'thin' to 'auto' for Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  
+  &::-webkit-scrollbar {
+    width: 3px; /* Increased width */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3); /* Increased opacity */
+    border-radius: 20px;
+    border: 1px solid transparent; /* Reduced border width */
+  }
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    padding-left: 70px;
+    padding-top: 40px;
+  }
+
+.logo {
+    height: 25px;
+    width: auto;
+}
+
+.brand-text {
+    color: white;
+    font-size: 30px;
+    font-family: 'system-ui';
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* Add new canvas styling */
+.grid-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; /* Move to bottommost layer */
+  pointer-events: none;
+}
+
+@keyframes gridFloat {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 60px;
+  }
+} 
+
+/* Update cursor glow to work with canvas */
+.cursor-glow {
+  z-index: 0; /* Update z-index to be above canvas but below content */
+  position: fixed;
+  pointer-events: none;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, 
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+}
