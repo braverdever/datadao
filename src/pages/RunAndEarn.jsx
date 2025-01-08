@@ -25,6 +25,8 @@ import { toast } from "react-toastify";
 import { fetchTransactions } from "../utils/web3/transactions";
 import AutoModeIcon from '@mui/icons-material/AutoMode';
 import StopIcon from '@mui/icons-material/Stop';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const RunAndEarn = () => {
   const location = useLocation();
@@ -48,9 +50,9 @@ const RunAndEarn = () => {
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalSubmissions, setTotalSubmissions] = useState(0);
   const [submissionFrequency, setSubmissionFrequency] = useState([]);
-  const [timeRange, setTimeRange] = useState('24h'); // '24h', '12h', '6h', '1h'
   const [zoomLevel, setZoomLevel] = useState(24); // hours to display, now can go up to 168
   const [timeOffset, setTimeOffset] = useState(0);
+  const [isUrlExpanded, setIsUrlExpanded] = useState(false);
   
   useEffect(() => {
     if (apiInfo?.url) {
@@ -388,17 +390,41 @@ const RunAndEarn = () => {
   }, []);
 
   return (
-    <Container maxWidth="xl" sx={{ mt: 8, color: 'white' }}>
+    <Container maxWidth="xl" sx={{ 
+      mt: { xs: 4, sm: 6, md: 8 }, 
+      color: 'white',
+      px: { xs: 2, sm: 3, md: 4 }
+    }}>
       <Box sx={{ 
         display: 'flex',
-        gap: 4,
+        flexDirection: { xs: 'column', md: 'row'},
+        gap: { xs: 3, md: 4 },
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'none' : 'translateY(20px)',
         transition: 'all 0.6s ease-out'
       }}>
-        <Box sx={{ flex: '5', maxWidth: '60%' }}>
-          <Typography variant="h4" sx={{ mb: 3, fontStyle: "italic", fontWeight: "bold", fontSize: "48px" }}>Run & Earn</Typography>
-          <Typography variant="body1" sx={{ mb: 3 }}>
+        <Box sx={{ 
+          flex: '5', 
+          maxWidth: { xs: '100%', md:'60%' }
+        }}>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              mb: 3, 
+              fontStyle: "italic", 
+              fontWeight: "bold", 
+              fontSize: { xs: "32px", sm: "40px", md: "48px" } 
+            }}
+          >
+            Run & Earn
+          </Typography>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              mb: 3,
+              fontSize: { xs: '14px', sm: '16px' }
+            }}
+          >
             Run this script to submit the latest data to the DAO and earn
           </Typography>
 
@@ -417,15 +443,53 @@ const RunAndEarn = () => {
                 <TableBody>
                   <TableRow sx={{ '& td': { color: 'white', borderColor: 'rgba(255, 255, 255, 0.1)' } }}>
                     <TableCell sx={{ pl: 3 }}>URL :</TableCell>
-                    <TableCell align="right" sx={{ pr: 3 }}>
-                      <a 
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'white', textDecoration: 'none' }}
-                      >
-                        {url}
-                      </a>
+                    <TableCell 
+                      align="right" 
+                      sx={{ 
+                        pr: 3,
+                        maxWidth: { xs: '200px', sm: '300px', md: '300px' }, // Responsive max width
+                        cursor: 'pointer',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                        }
+                      }}
+                      onClick={() => setIsUrlExpanded(!isUrlExpanded)}
+                    >
+                      <Box sx={{
+                        position: 'relative',
+                        width: '100%'
+                      }}>
+                        <a 
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ 
+                            color: 'white', 
+                            textDecoration: 'none',
+                            display: 'block',
+                            overflow: 'hidden',
+                            textOverflow: isUrlExpanded ? 'clip' : 'ellipsis',
+                            whiteSpace: isUrlExpanded ? 'normal' : 'nowrap',
+                            wordBreak: 'break-all'
+                          }}
+                        >
+                          {url}
+                        </a>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, float: 'right', fontSize: '11px' }}>
+                          {isUrlExpanded ? (
+                            <>
+                              Click to collapse
+                              <KeyboardArrowUpIcon sx={{ fontSize: 16 }} />
+                            </>
+                          ) : (
+                            <>
+                              Click to expand
+                              <KeyboardArrowDownIcon sx={{ fontSize: 16 }} />
+                            </>
+                          )}
+                        </Box>
+                      </Box>
                     </TableCell>
                   </TableRow>
                   <TableRow sx={{ '& td': { color: 'white', borderColor: 'rgba(255, 255, 255, 0.1)' } }}>
@@ -504,7 +568,12 @@ const RunAndEarn = () => {
             </TableContainer>
 
             {/* Add New Header Form */}
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 2, 
+              mb: 2 
+            }}>
               <TextField
                 placeholder="Header Name"
                 value={newHeader.name}
@@ -515,7 +584,7 @@ const RunAndEarn = () => {
                   }
                 }}
                 sx={{
-                  flex: 1,
+                  flex: { xs: '1 1 100%', sm: 1 },
                   '& .MuiOutlinedInput-root': {
                     color: 'white',
                     '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
@@ -533,7 +602,7 @@ const RunAndEarn = () => {
                   }
                 }}
                 sx={{
-                  flex: 2,
+                  flex: { xs: '1 1 100%', sm: 2},
                   '& .MuiOutlinedInput-root': {
                     color: 'white',
                     '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
@@ -676,12 +745,12 @@ const RunAndEarn = () => {
             )}
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 4, mb: 5 }}>
+          <Box sx={{ display: 'flex', gap: 4, mb: 5, flexDirection: { xs: 'column', sm: 'row' } }}>
             {/* Left side - Stats Table */}
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 1, width: '100%' }}>
               <TableContainer component={Paper} sx={{ 
                 bgcolor: 'rgba(0, 0, 0, 0)',
-                padding: 2,
+                padding: { xs: 1, sm: 2 },
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: 1,
                 '& tr:last-child td': {
@@ -858,15 +927,18 @@ const RunAndEarn = () => {
 
         <Box sx={{
           flex: '3',
-          position: 'fixed',
+          position: { xs: 'static', md: 'fixed' },
           top: '200px',
           right: '100px',
+          mt: { xs: 4, md: 0 },
+          display: { xs: 'none', sm: 'block' } // Hide on mobile
         }}>
           <img 
             src="/run&earn_back.svg" 
             alt="Run and Earn"
             style={{
-              width: '600PX',
+              width: '100%',
+              maxWidth: '600px',
               height: 'auto',
               borderRadius: '8px'
             }}

@@ -1,9 +1,19 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import NavigationButton from './NavigationButton';
 
 const Layout = ({ children }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
+  const getButtonSize = () => {
+    if (isMobile) return { width: '80px', height: '30px', fontSize: '12px' };
+    if (isTablet) return { width: '100px', height: '35px', fontSize: '14px' };
+    return { width: '120px', height: '40px', fontSize: '16px' };
+  };
+
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -73,13 +83,14 @@ const Layout = ({ children }) => {
         <img src="/logo.svg" alt="Logo" className="logo" />
         <span className="brand-text">eclaim Protocol</span>
       </RouterLink>
-      {Array.isArray(currentNav) && currentNav.map((nav, index) => (
+      {!isMobile && Array.isArray(currentNav) && currentNav.map((nav, index) => (
         <NavigationButton
           onClick={() => navigate(nav.path)}
           key={index}
           text={nav.text}
           to={nav.path}
           customPosition={nav.customPosition}
+          buttonSize={getButtonSize()}
         />
       ))}
       {children}

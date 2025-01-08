@@ -3,11 +3,16 @@ import { Container, Typography, Box, Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 const BenefitItem = ({ title, description }) => (
   <Box sx={{ mb: 2 }}>
-    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+    <Box sx={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      mb: 1.5,
+      flexWrap: 'wrap' 
+    }}>
       <AddIcon sx={{ 
         color: 'white', 
         mr: 2, 
-        fontSize: '2rem'
+        fontSize: { xs: '1.5rem', md: '2rem' }
       }} />
       <Typography 
         variant="h4" 
@@ -15,7 +20,7 @@ const BenefitItem = ({ title, description }) => (
         sx={{ 
           color: 'white',
           fontWeight: 'bold',
-          fontSize: '24px',
+          fontSize: { xs: '20px', md: '24px' },
           letterSpacing: '0.5px'
         }}
       >
@@ -25,8 +30,8 @@ const BenefitItem = ({ title, description }) => (
     <Typography 
       variant="body1" 
       sx={{ 
-        ml: '44px',
-        fontSize: '16px',
+        ml: { xs: '32px', md: '44px' },
+        fontSize: { xs: '14px', md: '16px' },
         color: 'rgb(255, 255, 255)',
         maxWidth: '500px',
         lineHeight: 1.6
@@ -55,50 +60,55 @@ const Benefits = () => {
       <Box 
         sx={{ 
           minHeight: '100%',
-          pt: '20%',
-          pl: '8%',
-          position: 'relative'
+          pt: { xs: '20%', md: '10%' },
+          pl: { xs: '8%', md: '8%' },
+          position: 'relative',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 4,
+          alignItems: { xs: 'center', md: 'flex-start' }
         }}
       >
-        <Typography 
-          variant="h2" 
-          component="h1"
-          sx={{ 
-            mb: 4,
-            color: 'white',
-            fontSize: '48px',
-            fontWeight: 600,
-            letterSpacing: '1px',
-            fontStyle: 'italic'
-          }}
-        >
-          Benefits
-        </Typography>
-        
-        <Grid container spacing={4}>
-          {benefits.map((benefit, index) => (
-            <Grid item xs={12} key={index}>
-              <BenefitItem 
-                title={benefit.title} 
-                description={benefit.description}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <Box sx={{ flex: 2 }}>
+          <Typography 
+            variant="h2" 
+            component="h1"
+            sx={{ 
+              mb: 4,
+              color: 'white',
+              fontSize: { xs: '32px', md: '48px' },
+              fontWeight: 600,
+              letterSpacing: '1px',
+              fontStyle: 'italic'
+            }}
+          >
+            Benefits
+          </Typography>
+          
+          <Grid container spacing={4}>
+            {benefits.map((benefit, index) => (
+              <Grid item xs={12} key={index}>
+                <BenefitItem 
+                  title={benefit.title} 
+                  description={benefit.description}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
-        <Box 
-          sx={{ 
-            position: 'absolute',
-            right: '5%',
-            top: '24%',
-          }}
-        >
+        <Box sx={{ 
+          flex: { xs: '1', md: '3' },
+          textAlign: { xs: 'center', md: 'left' }
+        }}>
           <img 
             src="/benefits.svg" 
             alt="Benefits Illustration"
             style={{
-              width: '700px',
-              height: 'auto'
+              width: '80%',
+              maxWidth: '500px',
+              height: '100%',
+              minHeight: '32vh',
             }}
           />
         </Box>

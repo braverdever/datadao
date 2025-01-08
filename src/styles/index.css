@@ -9,23 +9,19 @@
   box-sizing: border-box;
 }
 
-body {
-  cursor: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
-  max-height: 100vh;
-  overflow: auto;
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-html {
+/* Fix right overflow */
+html, body {
+  max-width: 100%;
+  max-height: 100%;
+  overflow-x: hidden;
+  
   scroll-behavior: smooth;
-  scrollbar-width: auto; /* Changed from 'thin' to 'auto' for Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: 3px;
+  -ms-overflow-style: none;
   
   &::-webkit-scrollbar {
-    width: 3px; /* Increased width */
+    width: 3px;
+    height: 3px;
   }
 
   &::-webkit-scrollbar-track {
@@ -33,18 +29,80 @@ html {
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3); /* Increased opacity */
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 20px;
-    border: 1px solid transparent; /* Reduced border width */
+    border: 1px solid transparent;
   }
 }
 
+body {
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: auto;
+  -ms-overflow-style: none;
+}
+
+/* Add responsive breakpoints */
+:root {
+  --mobile: 480px;
+  --tablet: 768px;
+  --laptop: 1024px;
+  --desktop: 1366px;
+}
+
+/* Logo container responsive styles */
 .logo-container {
-    display: flex;
-    align-items: center;
-    padding-left: 70px;
-    padding-top: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 70px;
+  padding-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .logo-container {
+    padding-left: 20px;
+    padding-top: 20px;
   }
+  
+  .logo {
+    height: 20px;
+  }
+  
+  .brand-text {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-container {
+    padding-left: 15px;
+    padding-top: 15px;
+  }
+  
+  .logo {
+    height: 18px;
+  }
+  
+  .brand-text {
+    font-size: 20px;
+  }
+}
+
+/* Cursor glow responsive adjustment */
+.cursor-glow {
+  width: 300px;
+  height: 300px;
+}
+
+@media (max-width: 768px) {
+  .cursor-glow {
+    width: 200px;
+    height: 200px;
+  }
+}
 
 .logo {
     height: 25px;

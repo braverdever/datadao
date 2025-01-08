@@ -96,59 +96,82 @@ const Transactions = () => {
       <Box 
         sx={{ 
           minHeight: '100%',
-          pt: '10%',
-          pl: '5%',
+          pt: { xs: '10%', md: '5%' },
+          pl: { xs: '4%', md: '5%' },
           position: 'relative',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 4,
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
           transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
         }}
       >
-        <Typography 
-          variant="h2" 
-          component="h1"
-          sx={{ 
-            mb: 4,
-            color: 'white',
-            fontSize: '48px',
-            fontWeight: 600,
-            letterSpacing: '1px',
-            fontStyle: 'italic'
-          }}
-        >
-          Latest Transactions
-        </Typography>
-        
-        <Box sx={{ maxWidth: '700px' }}>
-          {loading ? (
-            <CircularProgress sx={{ position: 'relative', color: 'white', top: '50%', left: '20%' }} />
-          ) : (
-            transactions.map((tx, index) => (
-              <TransactionItem 
-                key={index}
-                from={tx.from}
-                to={tx.to}
-                type={tx.type}
-                timestamp={tx.timestamp}
-                hash={tx.hash}
-              />
-            ))
-          )}
+        <Box sx={{ 
+          flex: 2, 
+          position: 'relative',
+          zIndex: 2
+        }}>
+          <Typography 
+            variant="h2" 
+            component="h1"
+            sx={{ 
+              mb: 4,
+              color: 'white',
+              fontSize: { xs: '32px', md: '48px' },
+              fontWeight: 600,
+              letterSpacing: '1px',
+              fontStyle: 'italic'
+            }}
+          >
+            Latest Transactions
+          </Typography>
+          
+          <Box sx={{ 
+            maxWidth: { xs: '100%', md: '700px' },
+            overflowX: { xs: 'auto', md: 'visible' }
+          }}>
+            {loading ? (
+              <CircularProgress sx={{ 
+                position: 'relative', 
+                color: 'white', 
+                top: '50%', 
+                left: { xs: '45%', md: '20%' } 
+              }} />
+            ) : (
+              transactions.map((tx, index) => (
+                <TransactionItem 
+                  key={index}
+                  from={tx.from}
+                  to={tx.to}
+                  type={tx.type}
+                  timestamp={tx.timestamp}
+                  hash={tx.hash}
+                />
+              ))
+            )}
+          </Box>
         </Box>
 
         <Box 
           sx={{ 
-            position: 'absolute',
-            right: '5%',
-            top: '22%',
+            position: { xs: 'relative', md: 'absolute' },
+            right: { xs: 'auto', md: '5%' },
+            top: { xs: 'auto', md: '22%' },
+            width: { xs: '100%', md: 'auto' },
+            textAlign: { xs: 'center', md: 'left' },
+            display: { xs: 'none', md: 'block' },
+            zIndex: 2
           }}
         >
           <img 
             src="/transactions.svg" 
             alt="Transactions Illustration"
             style={{
-              width: '700px',
+              width: '100%',
+              maxWidth: '700px',
               height: 'auto',
+              opacity: 1
             }}
           />
         </Box>

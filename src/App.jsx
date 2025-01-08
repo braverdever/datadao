@@ -15,6 +15,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Deposit from './pages/Deposit';
 import RunAndEarn from './pages/RunAndEarn';
+import { useEffect, useState } from 'react';
 
 const PageWrapper = () => {
   const location = useLocation();
@@ -36,10 +37,23 @@ const PageWrapper = () => {
 };
 
 const App = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <Router>
       <Layout>
-        <CanvasCursor />
+        {!isMobile && <CanvasCursor />}
         <PageWrapper />
         <GridAnimation />
         {/* <SoftDotsBackground /> */}

@@ -5,7 +5,9 @@ import {
   TextField,
   Button,
   CircularProgress,
-  InputAdornment
+  InputAdornment,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Web3 } from 'web3';
@@ -16,6 +18,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { convertToUSDFromWei } from "../utils/convert.js";
 
 const RegisterForm = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const contractAddress = config.networks["base-mainnet"].contractAddress;
   const web3Instance = new Web3(window.ethereum);
   const [currentStep, setCurrentStep] = useState(0);
@@ -158,8 +163,9 @@ const RegisterForm = () => {
     <Box 
       sx={{ 
         minHeight: '100%',
-        pt: '15%',
-        pl: '18%',
+        pt: { xs: '25%', sm: '20%', md: '15%' },
+        pl: { xs: '5%', sm: '10%', md: '18%' },
+        pr: { xs: '5%', sm: '10%', md: '0' },
         position: 'relative',
       }}
     >
@@ -167,9 +173,9 @@ const RegisterForm = () => {
         variant="h2" 
         component="h1"
         sx={{ 
-          mb: 6,
+          mb: { xs: 3, sm: 4, md: 6 },
           color: 'white',
-          fontSize: '48px',
+          fontSize: { xs: '32px', sm: '40px', md: '48px' },
           fontWeight: 600,
           letterSpacing: '1px',
           fontStyle: 'italic'
@@ -178,13 +184,15 @@ const RegisterForm = () => {
         Create New DataDAO
       </Typography>
 
-      <Box sx={{ maxWidth: '600px' }}>
+      <Box sx={{ 
+        maxWidth: { xs: '100%', sm: '500px', md: '600px' }
+      }}>
         <Typography 
           variant="h4" 
           sx={{ 
             color: 'white',
-            mb: 3,
-            fontSize: '24px'
+            mb: { xs: 2, sm: 2.5, md: 3 },
+            fontSize: { xs: '20px', sm: '22px', md: '24px' }
           }}
         >
           {steps[currentStep].title}
@@ -225,7 +233,7 @@ const RegisterForm = () => {
               }
             }
           }}
-          sx={{ mb: 4 }}
+          sx={{ mb: { xs: 3, sm: 3.5, md: 4 } }}
         />
 
         <Button
@@ -238,6 +246,8 @@ const RegisterForm = () => {
             borderRadius: '0px',
             border: '1px solid rgba(255, 255, 255, 0.5)',
             float: 'right',
+            padding: { xs: '6px 16px', sm: '8px 20px', md: '8px 24px' },
+            fontSize: { xs: '14px', sm: '15px', md: '16px' },
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.2)',
               border: '1px solid rgba(255, 255, 255, 0.5)'
@@ -254,17 +264,23 @@ const RegisterForm = () => {
 
       <Box 
         sx={{ 
-          position: 'absolute',
-          right: '20%',
-          top: '23%',
+          position: { xs: 'static', md: 'fixed' },
+          right: { md: '20%' },
+          top: { md: '23%' },
+          mt: { xs: 8, sm: 10, md: 0 },
+          textAlign: { xs: 'center', md: 'left' },
+          zIndex: -1
         }}
       >
         <img 
           src="/register.svg" 
           alt="DAO Illustration"
           style={{
-            width: '500px',
+            width: '100%',
+            maxWidth: '500px',
             height: 'auto',
+            display: isMobile ? 'none' : 'block',
+            opacity: 0.5
           }}
         />
       </Box>

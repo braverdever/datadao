@@ -83,7 +83,7 @@ const DashboardCard = ({ data }) => {
             }
           }}
         >
-          Run & Earn
+          Run
         </Button>
         <Button
           startIcon={<Box component="img" src="/deposit.svg" alt="Deposit icon" sx={{ width: 20, height: 20 }} />}

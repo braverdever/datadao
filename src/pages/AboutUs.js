@@ -19,54 +19,63 @@ const AboutUs = () => {
       <Box 
         sx={{ 
           minHeight: '100%',
-          pt: '15%',
-          pl: '8%',
+          pt: { xs: '15%', md: '12%' },
+          pl: { xs: '8%', md: '8%' },
           position: 'relative',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 4,
+          alignItems: { xs: 'center', md: 'flex-start' }
         }}
       >
-        <Typography 
-          variant="h2" 
-          component="h1"
-          sx={{ 
-            mb: 4,
-            color: 'white',
-            fontSize: '48px',
-            fontWeight: 600,
-            letterSpacing: '1px',
-            fontStyle: 'italic'
-          }}
-        >
-          {aboutUs.title}
-        </Typography>
-        
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            fontSize: '16px',
-            color: 'rgb(255, 255, 255)',
-            maxWidth: '550px',
-            lineHeight: 1.4,
-            letterSpacing: '0.5px',
-            whiteSpace: 'pre-line'
-          }}
-        >
-          {aboutUs.description}
-        </Typography>
-
+        <Box sx={{ flex: 2 }}>
+          <Typography 
+            variant="h2" 
+            component="h1"
+            sx={{ 
+              mb: 4,
+              color: 'white',
+              fontSize: { xs: '32px', md: '48px' },
+              fontWeight: 600,
+              letterSpacing: '1px',
+              fontStyle: 'italic'
+            }}
+          >
+            {aboutUs.title}
+          </Typography>
+          
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              fontSize: { xs: '14px', md: '16px' },
+              color: 'rgb(255, 255, 255)',
+              maxWidth: '550px',
+              lineHeight: 1.4,
+              letterSpacing: '0.5px',
+              whiteSpace: 'pre-line'
+            }}
+          >
+            {aboutUs.description}
+          </Typography>
+        </Box>
 
         <Box 
           sx={{ 
-            position: 'absolute',
-            right: '5%',
-            top: '26%',
+            right: { xs: 'auto', md: '5%' },
+            top: { xs: 'auto', md: '26%' },
+            width: { xs: '100%', md: 'auto' },
+            textAlign: { xs: 'center', md: 'left' },
+            flex: 3
           }}
         >
           <img 
             src="/about_us.svg" 
-            alt="Benefits Illustration"
+            alt="About Us Illustration"
             style={{
-              width: '700px',
+              width: '80%',
+              maxWidth: '600px',
               height: 'auto',
+              minHeight: '35vh',
             }}
           />
         </Box>

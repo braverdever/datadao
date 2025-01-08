@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Box } from '@mui/material';
 import { scrambleText } from '../utils/textEffects';
 
-const NavigationButton = ({ text, onClick, customPosition }) => {
+const NavigationButton = ({ text, to, customPosition, onClick, buttonSize }) => {
   const [displayText, setDisplayText] = React.useState(text);
   const [isHovering, setIsHovering] = React.useState(false);
 

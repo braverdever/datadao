@@ -39,52 +39,66 @@ const FirstPageCard = ({ svgUrl, text, margin }) => {
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       sx={{
-        width: '500px',
-        height: '120px',
+        width: {
+          xs: '90vw',
+          sm: '400px',
+          md: '500px'
+        },
+        height: {
+          xs: '100px',
+          sm: '110px',
+          md: '120px'
+        },
         border: '1px solid rgba(255, 255, 255, 0.1)',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '15px',
+        gap: {
+          xs: '10px',
+          sm: '12px',
+          md: '15px'
+        },
         margin: margin || 0,
         cursor: 'none',
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'scale(1.05)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-          '& img': {
-            animation: 'float 2s ease-in-out infinite'
-          }
-        },
-        '@keyframes float': {
-          '0%, 100%': {
-            transform: 'translateY(0)'
-          },
-          '50%': {
-            transform: 'translateY(-10px)'
-          }
+          backgroundColor: 'rgba(255, 255, 255, 0.05)'
         }
       }}
     >
-        <Typography
-            sx={{
-                color: 'white',
-                fontSize: '40px',
-                fontFamily: 'monospace',
-            }}
-        >
-            {displayText}
-        </Typography>
-        <img
-            src={svgUrl}
-            alt={text}
-            style={{
-            width: '100px',
-            height: '100px'
-            }}
-        />
+      <Typography
+        sx={{
+          color: 'white',
+          fontSize: {
+            xs: '24px',
+            sm: '32px',
+            md: '40px'
+          },
+          fontFamily: 'monospace'
+        }}
+      >
+        {displayText}
+      </Typography>
+      <Box
+        component="img"
+        src={svgUrl}
+        alt={text}
+        sx={{
+          width: {
+            xs: '60px',
+            sm: '80px',
+            md: '100px'
+          },
+          height: {
+            xs: '60px',
+            sm: '80px',
+            md: '100px'
+          }
+        }}
+      />
     </Box>
   );
 };

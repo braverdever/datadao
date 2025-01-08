@@ -86,19 +86,20 @@ const DaoList = () => {
       <Box 
         sx={{ 
           minHeight: '100%',
-          pt: '5%',
-          pl: '0%',
+          pt: { xs: '15%', sm: '10%', md: '5%' },
+          pl: { xs: '5%', sm: '5%', md: '0%' },
           pb: '100px',
           overflowY: 'auto',
           position: 'relative',
           display: 'flex',
-          gap: 4,
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          }
+          flexDirection: { xs: 'column', lg: 'row' },
+          gap: 4
         }}
       >
-        <Box sx={{ flex: '0 0 60%' }}>
+        <Box sx={{ 
+          flex: { xs: '1', lg: '0 0 60%' },
+          width: '100%'
+        }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
             <Typography 
               variant="h2" 
@@ -141,9 +142,12 @@ const DaoList = () => {
 
           <Box sx={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: 3, 
-            mb: 4 
+            gridTemplateColumns: {
+              xs: 'repeat(auto-fill, minmax(140px, 1fr))',
+              sm: 'repeat(auto-fill, minmax(200px, 1fr))',
+              md: 'repeat(auto-fill, minmax(430px, 1fr))'
+            },
+            gap: 3 
           }}>
             <StatsCard title="USERS" value={stats.users} />
             <StatsCard title="DATA SOURCES" value={stats.dataSources} />
@@ -157,8 +161,13 @@ const DaoList = () => {
             </Box>
           ) : (
             <Box sx={{ 
+              paddingTop: '50px',
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(430px, 1fr))',
+              gridTemplateColumns: {
+                xs: 'repeat(auto-fill, minmax(140px, 1fr))',
+                sm: 'repeat(auto-fill, minmax(200px, 1fr))',
+                md: 'repeat(auto-fill, minmax(430px, 1fr))'
+              },
               gap: 3 
             }}>
               {rows.map(row => (
@@ -169,13 +178,14 @@ const DaoList = () => {
         </Box>
 
         <Box sx={{ 
-          flex: '0 0 40%',
-          position: 'fixed',
+          flex: { xs: '1', lg: '0 0 40%' },
+          position: { xs: 'static', lg: 'fixed' },
           top: '250px',
           right: '150px',
-          display: 'flex',
+          display: { xs: 'none', md: 'flex' },
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          zIndex: -1
         }}>
           <Box 
             component="img"
