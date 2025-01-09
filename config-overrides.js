@@ -26,40 +26,50 @@ module.exports = function override(config) {
     tls: false,
     fs: false,
     readline: false,
-    worker_threads: false
+    worker_threads: false,
+    bufferutil: false,
+    'utf-8-validate': false
   };
   config.resolve.alias = alias;
 
-  config.plugins = (config.plugins || []).concat([
+  config.plugins = config.plugins.filter(plugin => 
+    !(plugin instanceof webpack.DefinePlugin)
+  );
+
+  config.plugins.push(
     new webpack.ProvidePlugin({
       process: 'process/browser',
-      Buffer: ['buffer', 'Buffer'],
+      Buffer: ['buffer', 'Buffer']
     }),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(process.env)
+      'process.env': {
+        ...Object.keys(process.env).reduce((env, key) => {
+          env[key] = JSON.stringify(process.env[key]);
+          return env;
+        }, {}),
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
     })
-  ]);
+  );
 
   config.module.rules.push({
     test: /\.js$/,
     enforce: 'pre',
     use: ['source-map-loader'],
-    exclude: /node_modules/,
+    exclude: /node_modules/
   });
-  config.ignoreWarnings = [/Failed to parse source map/];
 
-  config.module = {
-    ...config.module,
-    rules: [
-      ...config.module.rules,
-      {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      }
-    ]
-  };
+  config.ignoreWarnings = [
+    /Failed to parse source map/,
+    /Critical dependency/
+  ];
+
+  config.module.rules.push({
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false
+    }
+  });
 
   return config;
 };

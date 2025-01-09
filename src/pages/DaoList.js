@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { Box, Button, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -9,11 +9,11 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import config from "../constants/config.json";
 import { convertToUSDFromWei } from "../utils/convert";
+import { fetchTransactions } from "../utils/web3/transactions";
 
 const DaoList = () => {
   const network = config.networks["base-mainnet"];
   const rpcEndpoint = network.rpcEndpoint;
-  const contractAddress = network.contractAddress;
   const [rows, setRows] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -25,20 +25,27 @@ const DaoList = () => {
     submissions: 0
   });
 
-  const init = async () => {
+  const init = useCallback(async () => {
+    if (rpcEndpoint === undefined) return;
+    
     const web3Instance = new Web3(rpcEndpoint);
     setIsLoading(true);
     try {
-      const contractABI = DaoABI.abi;
+      const txs = await fetchTransactions(1000);
+
       const contract = new web3Instance.eth.Contract(
-        contractABI,
-        contractAddress
+        DaoABI.abi,
+        config.networks["base-mainnet"].contractAddress
       );
+      
       const apiListLength = await contract.methods.getAPIListLength().call();
       let data = [];
+      let submissionReward = 0;
+
       for (let i = 0; i < apiListLength; i++) {
         const url = await contract.methods.getAPIUrlfromID(i).call();
         const apiInfo = await contract.methods.getAPIInfo(url).call();
+        submissionReward = Number(apiInfo[3]);
         data.push({
           id: i,
           url,
@@ -55,27 +62,28 @@ const DaoList = () => {
       }
       setRows(data);
       
-      const totalEarnedUSD = await convertToUSDFromWei(
-        data.reduce((acc, row) => acc + row.submissionReward, 0)
-      );
+      const submittedTotal = txs
+        .filter(tx => tx.type === 'Submitted')
+        .length * submissionReward;
+      
+      const totalEarnedUSD = await convertToUSDFromWei(submittedTotal);
       
       setStats({
         users: data.reduce((acc, row) => acc + row.contributorsCount, 0),
         dataSources: data.length,
         totalEarned: totalEarnedUSD,
-        submissions: data.reduce((acc, row) => acc + row.currentTick, 0)
+        submissions: txs.filter(tx => tx.type === 'Submitted').length
       });
     } catch (error) {
-      console.log(error);
-      toast.error("Error fetching API list");
+      console.error(error);
+      toast.error("Error fetching data");
     }
     setIsLoading(false);
-  };
+  }, [rpcEndpoint]);
 
   useEffect(() => {
-    if (rpcEndpoint === undefined) return;
     init();
-  }, [rpcEndpoint]);
+  }, [init]);
 
   const goToRegister = () => {
     navigate("/register");

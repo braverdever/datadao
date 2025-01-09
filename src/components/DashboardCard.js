@@ -24,7 +24,7 @@ const DashboardCard = ({ data }) => {
     };
 
     calculateDailyReward();
-  }, [data.submissionReward, data.cooldownTime]);
+  }, [data.submissionReward, data.cooldownTime, data.updateCoolDown]);
 
   const handleDeposit = () => {
     navigate('/deposit', { state: { apiInfo: data } });
@@ -65,7 +65,7 @@ const DashboardCard = ({ data }) => {
           ${dailyReward === 'N/A' ? 'N/A' : dailyReward.toFixed(2)} per day
         </Box>
         <Box sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-          {formatTimeAgo(data.lastSubmissionTime)}
+          {formatTimeAgo(data.lastSubmissionTime) === 'Not available' ? 'Not Submitted' : formatTimeAgo(data.lastSubmissionTime)}
         </Box>
       </Box>
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>

@@ -1,5 +1,5 @@
 /* global BigInt */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
   Container, 
@@ -79,7 +79,7 @@ const RunAndEarn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchPoolStats = async () => {
+  const fetchPoolStats = useCallback(async () => {
     try {
       const web3Instance = new Web3(config.networks["base-mainnet"].rpcEndpoint);
       const contract = new web3Instance.eth.Contract(
@@ -87,15 +87,11 @@ const RunAndEarn = () => {
         config.networks["base-mainnet"].contractAddress
       );
 
-      // Get API info for the current URL
       const apiInfo = await contract.methods.getAPIInfo(url).call();
-      
-      // Get total pool (convert from Wei to USD)
       const fund = await contract.methods.getDepositedFund(url).call();
       const totalPoolUSD = await convertToUSDFromWei(Number(fund));
 
-      // Calculate daily earnings based on submission reward and cooldown
-      const submissionsPerDay = Math.floor(86400/ Number(apiInfo[2])); // 86400 seconds in a day
+      const submissionsPerDay = Math.floor(86400 / Number(apiInfo[2]));
       const dailyRewardUSD = await convertToUSDFromWei(Number(apiInfo[3]) * submissionsPerDay);
 
       setPoolStats({
@@ -106,13 +102,13 @@ const RunAndEarn = () => {
     } catch (error) {
       console.error('Error fetching pool stats:', error);
     }
-  };
+  }, [url]);
 
   useEffect(() => {
     if (url) {
       fetchPoolStats();
     }
-  }, [url]);
+  }, [url, fetchPoolStats]);
 
   // Add new header handler
   const handleAddHeader = () => {
@@ -166,7 +162,7 @@ const RunAndEarn = () => {
   };
 
   // Run single submission
-  const handleRun = async () => {
+  const handleRun = useCallback(async () => {
     if (!reclaimAppSecret) {
       toast.error('Please input a correct secret key');
       return;
@@ -248,19 +244,19 @@ const RunAndEarn = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [reclaimAppId, reclaimAppSecret, url, headers, apiInfo]);
 
   // Auto-run effect
   useEffect(() => {
     let interval;
     if (isAutoRunning) {
-      handleRun(); // Run immediately
+      handleRun();
       interval = setInterval(() => {
         handleRun();
-      }, (apiInfo?.updateCoolDown || 60) * 1000); // Use cooldown from API info or default to 60s
+      }, (apiInfo?.updateCoolDown || 60) * 1000);
     }
     return () => clearInterval(interval);
-  }, [isAutoRunning]);
+  }, [isAutoRunning, handleRun, apiInfo?.updateCoolDown]);
 
   const transformProofForContract = (proof) => {
     // Transform proof into format expected by smart contract
@@ -300,16 +296,16 @@ const RunAndEarn = () => {
   }, [earnings, costs]);
 
   // Add this function to fetch stats from events
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const now = Math.floor(Date.now() / 1000) * 1000;
-      const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000); // Changed from 24 hours to 7 days
+      const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000);
       
       const transactions = await fetchTransactions(1000);
       const submissionEvents = transactions.filter(tx => 
         tx.type === 'Submitted' && 
         tx.apiUrl === url &&
-        Number(tx.timestamp) >= oneWeekAgo // Changed time range
+        Number(tx.timestamp) >= oneWeekAgo
       );
 
       // Store actual submission timestamps instead of frequency
@@ -342,14 +338,14 @@ const RunAndEarn = () => {
       console.error('Error fetching stats:', error);
       toast.error('Failed to fetch submission statistics');
     }
-  };
+  }, [url]);
 
   // Add useEffect to fetch stats
   useEffect(() => {
     if (url) {
       fetchStats();
     }
-  }, [url]);
+  }, [url, fetchStats]);
 
   const getVisibleData = () => {
     const now = Date.now();

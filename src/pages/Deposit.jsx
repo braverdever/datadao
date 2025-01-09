@@ -31,7 +31,7 @@ const Deposit = () => {
       navigate('/dao-list');
       toast.error('Invalid access. Please select a DAO to deposit.');
     }
-  }, []);
+  }, [apiInfo, navigate]);
 
   const handleAmountChange = async (event) => {
     const value = event.target.value;
