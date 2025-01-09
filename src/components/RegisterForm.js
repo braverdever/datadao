@@ -20,7 +20,6 @@ import { convertToUSDFromWei } from "../utils/convert.js";
 const RegisterForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const contractAddress = config.networks["base-mainnet"].contractAddress;
   const web3Instance = new Web3(window.ethereum);
   const [currentStep, setCurrentStep] = useState(0);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button } from '@mui/material';
 import { convertToUSDFromWei } from '../utils/convert';
 import { useNavigate } from 'react-router-dom';
-import { formatDateTime, formatTimeAgo } from '../utils/time';
+import { formatTimeAgo } from '../utils/time';
 
 const DashboardCard = ({ data }) => {
   const [dailyReward, setDailyReward] = useState('N/A');

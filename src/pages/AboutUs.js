@@ -5,13 +5,7 @@ const AboutUs = () => {
   
   const aboutUs = {
     title: "About DataDAO",
-    description: "Data DAOs are the first DAOs that are truly Decentralized, Autonomous Organizations. \n\n \
-      Anyone can spin up a Data DAO to collect data or bring data feeds on chain. \n\n \
-      Anyone can fund the Data DAO to keep it active. \n\n \
-      Anyone with a computer can contribute data by running a simple script on their computer. \n\n \
-      This script is powered by Reclaim Protocol's zkTLS. \n\n \
-      Anyone who contributes data onchain is paid out automatically by the smart contract. \
-      Incentives and collaboration at the scale of the internet."
+    description: "Data DAOs are the first DAOs that are truly Decentralized, Autonomous Organizations. \n\nAnyone can spin up a Data DAO to collect data or bring data feeds on chain. \n\nAnyone can fund the Data DAO to keep it active. \n\nAnyone with a computer can contribute data by running a simple script on their computer. \n\nThis script is powered by Reclaim Protocol's zkTLS. \n\nAnyone who contributes data onchain is paid out automatically by the smart contract. \n\nIncentives and collaboration at the scale of the internet."
   };
 
   return (

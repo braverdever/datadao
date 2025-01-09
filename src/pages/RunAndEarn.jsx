@@ -51,7 +51,6 @@ const RunAndEarn = () => {
   const [totalSubmissions, setTotalSubmissions] = useState(0);
   const [submissionFrequency, setSubmissionFrequency] = useState([]);
   const [zoomLevel, setZoomLevel] = useState(24); // hours to display, now can go up to 168
-  const [timeOffset, setTimeOffset] = useState(0);
   const [isUrlExpanded, setIsUrlExpanded] = useState(false);
   
   useEffect(() => {
@@ -355,7 +354,7 @@ const RunAndEarn = () => {
   const getVisibleData = () => {
     const now = Date.now();
     const visibleTimeframe = zoomLevel * 60 * 60 * 1000;
-    const startTime = now - visibleTimeframe + timeOffset;
+    const startTime = now - visibleTimeframe;
     const endTime = startTime + visibleTimeframe;
     
     return submissionFrequency.filter(submission => 
@@ -843,7 +842,7 @@ const RunAndEarn = () => {
                       {getVisibleData().map((submission, i) => {
                         const now = Date.now();
                         const timeframe = zoomLevel * 60 * 60 * 1000;
-                        const startTime = now - timeframe + timeOffset;
+                        const startTime = now - timeframe;
                         
                         // Calculate position relative to visible window
                         let xPosition = ((submission.timestamp - startTime) / timeframe) * 100;
@@ -905,7 +904,7 @@ const RunAndEarn = () => {
                       {Array.from({ length: 5 }).map((_, i) => {
                         const now = Date.now();
                         const timeframe = zoomLevel * 60 * 60 * 1000;
-                        const startTime = now - timeframe + timeOffset;
+                        const startTime = now - timeframe;
                         const labelTime = startTime + (i * (timeframe / 4));
                         
                         return (

@@ -9,6 +9,7 @@ module.exports = function override(config) {
   }
   config.resolve.fallback = {
     ...fallback,
+    canvas: require.resolve('canvas-browserify'),
     crypto: require.resolve('crypto-browserify'),
     stream: require.resolve('stream-browserify'),
     constants: require.resolve('constants-browserify'),
