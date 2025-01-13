@@ -99,7 +99,8 @@ const Contacts = () => {
               width: '80%',
               maxWidth: '500px',
               height: 'auto',
-              minHeight: '35vh'
+              minHeight: '35vh',
+              opacity: '0.5'
             }}
           />
         </Box>

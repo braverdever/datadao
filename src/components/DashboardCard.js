@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { convertToUSDFromWei } from '../utils/convert';
 import { useNavigate } from 'react-router-dom';
 import { formatTimeAgo } from '../utils/time';
@@ -26,21 +26,19 @@ const DashboardCard = ({ data }) => {
     calculateDailyReward();
   }, [data.submissionReward, data.cooldownTime, data.updateCoolDown]);
 
-  const handleDeposit = () => {
-    navigate('/deposit', { state: { apiInfo: data } });
-  };
-
-  const handleRunAndEarn = () => {
+  const handleCardClick = () => {
     navigate('/run-and-earn', { state: { apiInfo: data } });
   };
 
   return (
     <Box
+      onClick={handleCardClick}
       sx={{
         border: '2px solid rgba(255, 255, 255, 0.1)',
         padding: '20px',
         width: '100%',
         color: 'white',
+        cursor: 'pointer',
         '&:hover': {
           border: '2px solid rgba(255, 255, 255, 0.2)',
           backgroundColor: 'rgba(255, 255, 255, 0.08)',
@@ -62,45 +60,11 @@ const DashboardCard = ({ data }) => {
       </Box>
       <Box sx={{ display: 'flex', gap: 1, mb: 2, justifyContent: 'space-between', alignItems: 'center' }}>
         <Box sx={{ color: '#ffffff' }}>
-          ${dailyReward === 'N/A' ? 'N/A' : dailyReward.toFixed(2)} per day
+          Earn ${dailyReward === 'N/A' ? 'N/A' : dailyReward.toFixed(2)} per day
         </Box>
         <Box sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
           {formatTimeAgo(data.lastSubmissionTime) === 'Not available' ? 'Not Submitted' : formatTimeAgo(data.lastSubmissionTime)}
         </Box>
-      </Box>
-      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-        <Button
-          startIcon={<Box component="img" src="/run&earn.svg" alt="Run & Earn icon" sx={{ width: 20, height: 20 }} />}
-          variant="outlined"
-          size="small"
-          onClick={handleRunAndEarn}
-          sx={{
-            color: 'white',
-            borderColor: 'rgba(255, 255, 255, 0)',
-            '&:hover': {
-              borderColor: 'rgba(255, 255, 255, 0)',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)'
-            }
-          }}
-        >
-          Run
-        </Button>
-        <Button
-          startIcon={<Box component="img" src="/deposit.svg" alt="Deposit icon" sx={{ width: 20, height: 20 }} />}
-          variant="outlined"
-          size="small"
-          onClick={handleDeposit}
-          sx={{
-            color: 'white',
-            borderColor: 'rgba(255, 255, 255, 0)',
-            '&:hover': {
-              borderColor: 'rgba(255, 255, 255, 0)',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)'
-            }
-          }}
-        >
-          Deposit
-        </Button>
       </Box>
     </Box>
   );

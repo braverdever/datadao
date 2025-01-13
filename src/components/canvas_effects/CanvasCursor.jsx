@@ -22,8 +22,8 @@ const CanvasCursor = ({
     // Add these variables at the start of useEffect
     let currentX = 0;
     let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
+    let targetX = window.clientX || window.innerWidth / 2;
+    let targetY = window.clientY || window.innerHeight / 2;
     let currentRadius = defaultRadius;
     let targetRadius = defaultRadius;
     let lastX = 0;

@@ -109,6 +109,7 @@ const Benefits = () => {
               maxWidth: '500px',
               height: '100%',
               minHeight: '32vh',
+              opacity: '0.5'
             }}
           />
         </Box>

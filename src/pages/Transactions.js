@@ -171,7 +171,7 @@ const Transactions = () => {
               width: '100%',
               maxWidth: '700px',
               height: 'auto',
-              opacity: 1
+              opacity: '0.5'
             }}
           />
         </Box>

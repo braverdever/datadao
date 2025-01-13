@@ -149,13 +149,11 @@ const DaoList = () => {
           </Box>
 
           <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: {
-              xs: 'repeat(auto-fill, minmax(140px, 1fr))',
-              sm: 'repeat(auto-fill, minmax(200px, 1fr))',
-              md: 'repeat(auto-fill, minmax(430px, 1fr))'
-            },
-            gap: 3 
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 2,
+            flexWrap: 'wrap',
+            mb: 4
           }}>
             <StatsCard title="USERS" value={stats.users} />
             <StatsCard title="DATA SOURCES" value={stats.dataSources} />
@@ -202,7 +200,8 @@ const DaoList = () => {
             sx={{
               width: '600px',
               height: 'auto',
-              marginTop: '0'
+              marginTop: '0',
+              opacity: '0.5'
             }}
           />
         </Box>
@@ -214,18 +213,30 @@ const DaoList = () => {
 
 const StatsCard = ({ title, value }) => (
   <Box sx={{
-    padding: '20px',
+    padding: '15px',
     overflow: 'hidden',
-    border: '2px solid rgba(255, 255, 255, 0.1)'
+    flex: '1 1 200px',
+    minWidth: '200px',
+    textAlign: 'center',
+    height: 'max-content',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   }}>
-    <Box
-      component="img"
-      src={`/stats_${title.toLowerCase().replace(' ', '_')}.svg`}
-      alt={`${title} icon`}
-      sx={{ width: 40, height: 40 }}
-    />
-    <Box sx={{ color: 'white', fontSize: '14px' }}>{title}</Box>
-    <Box sx={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>{value}</Box>
+    <Box sx={{ display: 'flow-root', alignItems: 'center', gap: 1 }}>
+      <Box
+        component="img"
+        src={`/stats_${title.toLowerCase().replace(' ', '_')}.svg`}
+        alt={`${title} icon`}
+        sx={{ width: 24, height: 24 }}
+      />
+      <Box sx={{ color: 'white', fontSize: '12px' }}>{title}</Box>
+    </Box>
+    <Box sx={{ 
+      fontSize: '20px',
+      fontWeight: 'bold', 
+      color: 'white'
+    }}>{value}</Box>
   </Box>
 );
 

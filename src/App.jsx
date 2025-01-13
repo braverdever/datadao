@@ -5,7 +5,6 @@ import CanvasCursor from './components/canvas_effects/CanvasCursor';
 import GridAnimation from './components/canvas_effects/GridAnimation';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 // Lazy load components
 const Home = lazy(() => import('./pages/Home'));
 const Benefits = lazy(() => import('./pages/Benefits'));
@@ -53,7 +52,7 @@ const App = () => {
   return (
     <Router>
       <Layout>
-        <CanvasCursor />
+        {window.innerWidth > 600 && <CanvasCursor />}
         <PageWrapper />
         <GridAnimation />
         <ToastContainer />

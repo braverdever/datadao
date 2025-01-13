@@ -70,6 +70,7 @@ const AboutUs = () => {
               maxWidth: '600px',
               height: 'auto',
               minHeight: '35vh',
+              opacity: '0.5'
             }}
           />
         </Box>

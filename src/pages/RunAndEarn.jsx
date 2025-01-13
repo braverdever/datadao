@@ -60,7 +60,7 @@ const RunAndEarn = () => {
   }, [apiInfo]);
 
   const [runningSubmissions, setRunningSubmissions] = useState([]);
-
+  console.log(apiInfo);
   const stats = {
     address: apiInfo?.lastSubmitter || 'N/A',
     name: apiInfo?.name || 'N/A',
@@ -69,7 +69,7 @@ const RunAndEarn = () => {
     data_RefreshWindow: `${apiInfo?.dataFreshnessWindow || 'N/A'} seconds`,
     number_Of_Contributions: apiInfo?.contributorsCount || 0,
     lastSubmitter: apiInfo?.lastSubmitter || 'N/A',
-    instruction: 'You can earn money if you run this DataDAO using your secret key'
+    instruction: apiInfo?.description || 'You can earn money if you run this DataDAO using your secret key'
   };
 
   const [poolStats, setPoolStats] = useState({
@@ -500,6 +500,152 @@ const RunAndEarn = () => {
             </TableContainer>
           </Box>
 
+          <Box sx={{ display: 'flex', gap: 4, mb: 4, flexDirection: { xs: 'column', sm: 'row' } }}>
+            <Box sx={{ flex: 1 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2 }}>
+                {/* Users Card */}
+                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                    <Box component="img" src="/stats_users.svg" alt="Users" sx={{ width: 40, height: 40 }} />
+                    <Typography variant="h7">USERS</Typography>
+                    <Typography variant="h7">{totalUsers.toLocaleString()}</Typography>
+                  </Box>
+                </Paper>
+
+                {/* Total Earned Card */}
+                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                    <Box component="img" src="/stats_total_earned.svg" alt="Earnings" sx={{ width: 40, height: 40 }} />
+                    <Typography sx={{ fontSize: '12px', paddingTop: '5px' }}>TOTAL EARNED</Typography>
+                    <Typography variant="h7">${totalEarned.toLocaleString()}</Typography>
+                  </Box>
+                </Paper>
+
+                {/* Submissions Card - Moved inline with other metrics */}
+                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                    <Box component="img" src="/stats_submissions.svg" alt="Submissions" sx={{ width: 40, height: 40 }} />
+                    <Typography variant="h7">SUBMISSIONS</Typography>
+                    <Typography variant="h7">{totalSubmissions.toLocaleString()}</Typography>
+                  </Box>
+                </Paper>
+
+                {/* Submission Frequency Chart - Now spans full width */}
+                <Paper className="chart-container" sx={{ 
+                  p: 2, 
+                  bgcolor: 'rgba(0, 0, 0, 0)', 
+                  color: 'white', 
+                  gridColumn: '1 / -1', 
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                    <Typography variant="h6" sx={{ width: '100%', textAlign: 'center' }}>Submission Frequency</Typography>
+                  </Box>
+
+                  <Box 
+                    sx={{ 
+                      position: 'relative',
+                      height: 'auto',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Box sx={{ 
+                      position: 'relative',
+                      height: '20px',
+                      width: '100%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                      borderRadius: '4px',
+                    }}>
+                      {getVisibleData().map((submission, i) => {
+                        const now = Date.now();
+                        const timeframe = zoomLevel * 60 * 60 * 1000;
+                        const startTime = now - timeframe;
+                        
+                        // Calculate position relative to visible window
+                        let xPosition = ((submission.timestamp - startTime) / timeframe) * 100;
+                        
+                        // Clamp position between 0 and 100
+                        xPosition = Math.max(0, Math.min(100, xPosition));
+                        
+                        return (
+                          <Box
+                            key={i}
+                            sx={{
+                              position: 'absolute',
+                              left: `${xPosition}%`,
+                              bottom: 0,
+                              width: '1px',
+                              height: '20px',
+                              bgcolor: 'rgba(255, 255, 255, 0.8)',
+                              '&:hover': {
+                                bgcolor: 'white',
+                                '& .tooltip': {
+                                  display: 'block'
+                                }
+                              },
+                            }}
+                          >
+                            <Box
+                              className="tooltip"
+                              sx={{
+                                position: 'absolute',
+                                bottom: '100%',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                display: 'none',
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: '4px 8px',
+                                borderRadius: '4px',
+                                whiteSpace: 'nowrap',
+                                zIndex: 1,
+                                fontSize: '12px',
+                                width: 'max-content',
+                                textAlign: 'center'
+                              }}
+                            >
+                              {new Date(submission.timestamp).toLocaleTimeString()}
+                            </Box>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+
+                    {/* Time labels */}
+                    <Box sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      mt: 1,
+                      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                      pt: 1
+                    }}>
+                      {Array.from({ length: 5 }).map((_, i) => {
+                        const now = Date.now();
+                        const timeframe = zoomLevel * 60 * 60 * 1000;
+                        const startTime = now - timeframe;
+                        const labelTime = startTime + (i * (timeframe / 4));
+                        
+                        return (
+                          <Typography key={i} variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)', width: 'max-content', textAlign: 'center' }}>
+                            {new Date(labelTime).toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                </Paper>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              {stats?.instruction}
+            </Typography>
+          </Box>
+
           <Box sx={{ mb: 4 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>Reclaim zkFetch App Secret</Typography>
             <TextField
@@ -739,185 +885,6 @@ const RunAndEarn = () => {
               </>
             )}
           </Box>
-
-          <Box sx={{ display: 'flex', gap: 4, mb: 5, flexDirection: { xs: 'column', sm: 'row' } }}>
-            {/* Left side - Stats Table */}
-            <Box sx={{ flex: 1, width: '100%' }}>
-              <TableContainer component={Paper} sx={{ 
-                bgcolor: 'rgba(0, 0, 0, 0)',
-                padding: { xs: 1, sm: 2 },
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: 1,
-                '& tr:last-child td': {
-                  borderBottom: 'none'
-                }
-              }}>
-                <Table>
-                  <TableBody>
-                    {Object.entries(stats).map(([key, value]) => (
-                      <TableRow key={key} sx={{ '& td': { color: 'white', borderColor: 'rgba(255, 255, 255, 0.1)' } }}>
-                        <TableCell sx={{ textTransform: 'uppercase' }}>{key}:</TableCell>
-                        <TableCell>
-                          {key.toLowerCase().includes('address') || key === 'lastSubmitter' ? (
-                            <a 
-                              href={`https://basescan.org/address/${value}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: 'white', textDecoration: 'none' }}
-                            >
-                              {value}
-                            </a>
-                          ) : value}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-
-            {/* Right side - Statistics Cards */}
-            <Box sx={{ flex: 1 }}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-                {/* Users Card */}
-                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                    <Box component="img" src="/stats_users.svg" alt="Users" sx={{ width: 40, height: 40 }} />
-                    <Typography variant="h7">USERS</Typography>
-                    <Typography variant="h7">{totalUsers.toLocaleString()}</Typography>
-                  </Box>
-                </Paper>
-
-                {/* Total Earned Card */}
-                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                    <Box component="img" src="/stats_total_earned.svg" alt="Earnings" sx={{ width: 40, height: 40 }} />
-                    <Typography sx={{ fontSize: '12px', paddingTop: '5px' }}>TOTAL EARNED</Typography>
-                    <Typography variant="h7">${totalEarned.toLocaleString()}</Typography>
-                  </Box>
-                </Paper>
-
-                {/* Submissions Card */}
-                <Paper sx={{ p: 2, bgcolor: 'rgba(0, 0, 0, 0)', color: 'white', textAlign: 'center', gridColumn: '1 / -1', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                    <Box component="img" src="/stats_submissions.svg" alt="Submissions" sx={{ width: 40, height: 40 }} />
-                    <Typography variant="h7">SUBMISSIONS</Typography>
-                    <Typography variant="h7">{totalSubmissions.toLocaleString()}</Typography>
-                  </Box>
-                </Paper>
-
-                {/* Enhanced Submission Frequency Chart */}
-                <Paper 
-                  className="chart-container"
-                  sx={{ 
-                    p: 2, 
-                    bgcolor: 'rgba(0, 0, 0, 0)', 
-                    color: 'white', 
-                    gridColumn: '1 / -1', 
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                  }}
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="h6" sx={{ width: '100%', textAlign: 'center' }}>Submission Frequency</Typography>
-                  </Box>
-
-                  <Box 
-                    sx={{ 
-                      position: 'relative',
-                      height: 'auto',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Box sx={{ 
-                      position: 'relative',
-                      height: '20px',
-                      width: '100%',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      borderRadius: '4px',
-                    }}>
-                      {getVisibleData().map((submission, i) => {
-                        const now = Date.now();
-                        const timeframe = zoomLevel * 60 * 60 * 1000;
-                        const startTime = now - timeframe;
-                        
-                        // Calculate position relative to visible window
-                        let xPosition = ((submission.timestamp - startTime) / timeframe) * 100;
-                        
-                        // Clamp position between 0 and 100
-                        xPosition = Math.max(0, Math.min(100, xPosition));
-                        
-                        return (
-                          <Box
-                            key={i}
-                            sx={{
-                              position: 'absolute',
-                              left: `${xPosition}%`,
-                              bottom: 0,
-                              width: '1px',
-                              height: '20px',
-                              bgcolor: 'rgba(255, 255, 255, 0.8)',
-                              '&:hover': {
-                                bgcolor: 'white',
-                                '& .tooltip': {
-                                  display: 'block'
-                                }
-                              },
-                            }}
-                          >
-                            <Box
-                              className="tooltip"
-                              sx={{
-                                position: 'absolute',
-                                bottom: '100%',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                display: 'none',
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                padding: '4px 8px',
-                                borderRadius: '4px',
-                                whiteSpace: 'nowrap',
-                                zIndex: 1,
-                                fontSize: '12px',
-                                width: 'max-content',
-                                textAlign: 'center'
-                              }}
-                            >
-                              {new Date(submission.timestamp).toLocaleTimeString()}
-                            </Box>
-                          </Box>
-                        );
-                      })}
-                    </Box>
-
-                    {/* Time labels */}
-                    <Box sx={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      mt: 1,
-                      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                      pt: 1
-                    }}>
-                      {Array.from({ length: 5 }).map((_, i) => {
-                        const now = Date.now();
-                        const timeframe = zoomLevel * 60 * 60 * 1000;
-                        const startTime = now - timeframe;
-                        const labelTime = startTime + (i * (timeframe / 4));
-                        
-                        return (
-                          <Typography key={i} variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)', width: 'max-content', textAlign: 'center' }}>
-                            {new Date(labelTime).toLocaleTimeString([], { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })}
-                          </Typography>
-                        );
-                      })}
-                    </Box>
-                  </Box>
-                </Paper>
-              </Box>
-            </Box>
-          </Box>
         </Box>
 
         <Box sx={{
@@ -935,9 +902,37 @@ const RunAndEarn = () => {
               width: '100%',
               maxWidth: '600px',
               height: 'auto',
-              borderRadius: '8px'
+              borderRadius: '8px',
+              opacity: '0.03'
             }}
           />
+        </Box>
+
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>API Statistics</Typography>
+          <TableContainer component={Paper} sx={{ 
+            bgcolor: 'transparent',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: 1,
+            '& tr:last-child td': {
+              borderBottom: 'none'
+            }
+          }}>
+            <Table>
+              <TableBody>
+                {Object.entries(stats).map(([key, value]) => (
+                  <TableRow key={key} sx={{ '& td': { color: 'white', borderColor: 'rgba(255, 255, 255, 0.1)' } }}>
+                    <TableCell sx={{ pl: 3, textTransform: 'capitalize' }}>
+                      {key.replace(/_/g, ' ')}
+                    </TableCell>
+                    <TableCell align="right" sx={{ pr: 3 }}>
+                      {value}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Box>
     </Container>

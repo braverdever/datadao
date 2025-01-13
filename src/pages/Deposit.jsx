@@ -187,6 +187,7 @@ const Deposit = () => {
             style={{
               width: '500px',
               height: 'auto',
+              opacity: '0.5'
             }}
           />
         </Box>

@@ -90,6 +90,7 @@ const Networks = () => {
               maxWidth: '500px',
               height: 'auto',
               minHeight: '35vh',
+              opacity: '0.5'
             }}
           />
         </Box>
